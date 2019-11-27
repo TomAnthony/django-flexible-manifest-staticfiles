@@ -4,3 +4,9 @@ The Changelog
 1.0.0 (27.11.2019)
 ~~~~~~~~~~~~~~~~~~
 * Initial release
+
+
+1.0.1 (27.11.2019)
+~~~~~~~~~~~~~~~~~~
+* Update to correctly filter references in other files (e.g. import() or url() statements in a CSS file)
+
