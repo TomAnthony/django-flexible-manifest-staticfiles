@@ -1,6 +1,6 @@
 # django-flexible-manifest-staticfiles
 
-This extendion to django.contrib.staticfiles.storage.ManifestStaticFilesStorage allows you to specify a list of file patterns that should be ignored/excluded from being versioned and added to the manifest. You can also specify it the other way around and say which files should be included.
+This extension to `django.contrib.staticfiles.storage.ManifestStaticFilesStorage` allows you to specify a list of file patterns that should be ignored/excluded from being versioned and added to the manifest. You can also specify it the other way around and say which files should be included.
 
 This allows you to add versioned naming to only static files of your choosing. For example, you may want CSS and JS files to be versioned, but not fonts, images or other assets.
 
@@ -29,9 +29,11 @@ Set in your `settings.py` you can set two settings:
  - `STATICFILES_VERSIONED_INCLUDE` - This is a list of patterns you want to be included. Only files that match at least one of these patterns will be included. If you omit this setting, then all files are included by default.
  - `STATICFILES_VERSIONED_EXCLUDE` - Any file matching any of these patterns will be excluded from being versioned.
 
- Note that the complete path relative to the `static` directory is available for matching against.
+Files must match against both rules (e.g. they must be both in the include list and not in the exclude list) in order to be versioned.
 
- ## Examples
+Note that the complete path relative to the `static` directory is available for matching against.
+
+## Examples
 
 This would only version `.css` and `.js` files, but would exclude minified files:
 

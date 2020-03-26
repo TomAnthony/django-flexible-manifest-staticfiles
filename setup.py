@@ -16,5 +16,6 @@ setup(
     license='MIT',
     description='An extension of Django ManifestStaticFilesStorage that allows ignoring (excluding) specified files from being versioned, such as images or fonts.',
     long_description=open('README.md').read(),
+    long_description_content_type="text/markdown",
     install_requires=[],
 )

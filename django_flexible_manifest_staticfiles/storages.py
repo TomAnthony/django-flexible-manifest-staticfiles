@@ -2,6 +2,7 @@ import os
 import re
 
 from collections import OrderedDict
+from urllib.parse import unquote, urlsplit, urlunsplit
 
 from django.conf import settings
 from django.contrib.staticfiles.storage import ManifestStaticFilesStorage
@@ -13,34 +14,12 @@ class FlexibleManifestStaticFilesStorage(ManifestStaticFilesStorage):
     whitelisted_patterns = getattr(settings, "STATICFILES_VERSIONED_INCLUDE", ['.*'])
     blacklisted_patterns = getattr(settings, "STATICFILES_VERSIONED_EXCLUDE", [])
 
-    def _post_process(self, paths, adjustable_paths, hashed_files):
+    def hashed_name(self, name, content=None, filename=None):
 
-        filtered_paths = OrderedDict()
+        if any(re.search(wp, name) for wp in self.whitelisted_patterns):
+            if not any(re.search(bp, name) for bp in self.blacklisted_patterns):
 
-        for name, val in paths.items():
-            if any(re.search(wp, name) for wp in self.whitelisted_patterns):
-                if not any(re.search(wp, name) for wp in self.blacklisted_patterns):
-                    filtered_paths[name] = val
-        
-        return super()._post_process(filtered_paths, adjustable_paths, hashed_files)
+                return super().hashed_name(name, content, filename)
 
+        return name
 
-    def url_converter(self, name, hashed_files, template=None):
-
-        super_converter = super().url_converter(name, hashed_files, template)
-
-        def converter(matchobj):
-            matched, url = matchobj.groups()
-
-            should_convert = False
-
-            if any(re.search(wp, url) for wp in self.whitelisted_patterns):
-                if not any(re.search(wp, url) for wp in self.blacklisted_patterns):
-                    should_convert = True
-
-            if not should_convert:
-                return matched
-
-            return super_converter(matchobj)
-
-        return converter
